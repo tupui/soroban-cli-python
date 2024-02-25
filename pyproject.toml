@@ -1,0 +1,92 @@
+[build-system]
+requires = ["hatchling>=1.14.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "soroban"
+version = "1.0.0"
+description = "CLI for Soroban contracts in Python"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "BSD-3-Clause"
+authors = [
+    { name = "Pamphile Roy" },
+]
+maintainers = [
+    { name = "Soroban CLI contributors" },
+]
+
+keywords = [
+    "stellar-sdk",
+    "stellar",
+    "stellar.org",
+    "lumens",
+    "xlm",
+    "blockchain",
+    "distributed exchange",
+    "cryptocurrency",
+    "dex",
+    "horizon",
+    "sdex",
+    "trading",
+    "soroban",
+    "soroban-rpc"
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+    "stellar-sdk",
+]
+
+[project.optional-dependencies]
+cli = [
+    "typer[all]",
+]
+
+tests = [
+    "pytest",
+    "pytest-cov",
+]
+
+dev = [
+    "soroban[cli,tests]",
+    "pre-commit",
+    "hatch",
+]
+
+[project.scripts]
+soroban = "soroban.cli:app"
+
+[project.urls]
+homepage = "https://github.com/tupui/soroban-cli-python"
+documentation = "https://github.com/tupui/soroban-cli-python"
+source = "https://github.com/tupui/soroban-cli-python"
+
+[tool.hatch]
+build.targets.wheel.packages = ["src/soroban"]
+build.targets.sdist.exclude = [
+  ".github",
+  "docs",
+  "tests",
+  "*.rst",
+  "*.yml",
+  ".*",
+]
+
+[tool.pytest.ini_options]
+addopts = "--durations 10"
+testpaths = [
+    "tests",
+]
+
+[tool.ruff.per-file-ignores]
+"**/__init__.py" = ["F403", "F405"]
