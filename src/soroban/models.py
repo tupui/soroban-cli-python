@@ -1,10 +1,26 @@
 import pathlib
+from typing import Literal
 
 from pydantic import model_validator, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from stellar_sdk import Keypair, Network
 
 __all__ = ["Identity", "NetworkConfig"]
+
+
+def _load_configuration(id: str | pathlib.Path, kind: Literal["identity", "network"]):
+    id = pathlib.Path(id)
+    global_config = pathlib.Path.home() / ".config" / "soroban" / kind / id / ".toml"
+    local_config = pathlib.Path(".soroban") / kind / id / ".toml"
+
+    id = pathlib.Path(id)
+
+    if id.is_file():
+        return id
+    elif local_config.is_file():
+        return local_config
+    elif global_config.is_file():
+        return global_config
 
 
 class Identity(BaseSettings):
@@ -32,11 +48,7 @@ class Identity(BaseSettings):
         if account is None:
             identity = Identity()
         elif isinstance(account, (str, pathlib.Path)):
-            fname = (
-                account
-                if pathlib.Path(account).is_file()
-                else pathlib.Path(".soroban/identity") / account / ".toml"
-            )
+            fname = _load_configuration(account, "identity")
             identity = Identity(_env_file=fname)
         else:
             identity = Identity(keypair=account)
@@ -49,3 +61,12 @@ class NetworkConfig(BaseSettings):
     base_fee: int = 100
 
     model_config = SettingsConfigDict(env_file="network.toml")
+
+    @classmethod
+    def from_network(cls, network: str | pathlib.Path | None = None) -> "NetworkConfig":
+        if network is None:
+            network = NetworkConfig()
+        elif isinstance(network, (str, pathlib.Path)):
+            fname = _load_configuration(network, "network")
+            network = NetworkConfig(_env_file=fname)
+        return network

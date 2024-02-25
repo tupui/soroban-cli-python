@@ -30,3 +30,10 @@ class TestIdentity:
         keypair = Keypair.random()
         with pytest.raises(ValueError, match="provide a secret key or a Keypair"):
             soroban.Identity(public_key=keypair.public_key)
+
+
+class TestNetworkConfig:
+
+    def test_from_network(self):
+        testnet = pathlib.Path(__file__).parent / "testnet.toml"
+        soroban.NetworkConfig.from_network(network=testnet)

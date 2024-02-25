@@ -15,11 +15,19 @@ def invoke(
     function_name: str,
     args: list[xdr.SCVal] | None = None,
     *,
-    source_account: stellar_sdk.Keypair | str | None = None,
-    network: soroban_models.NetworkConfig | None = None,
+    source_account: soroban_models.Identity | stellar_sdk.Keypair | str | None = None,
+    network: soroban_models.NetworkConfig | soroban_models.NetworkConfig | None = None,
 ):
-    identity = soroban_models.Identity.from_source_account(account=source_account)
-    network = soroban_models.NetworkConfig() if network is None else network
+    identity = (
+        source_account
+        if isinstance(source_account, soroban_models.Identity)
+        else soroban_models.Identity.from_source_account(account=source_account)
+    )
+    network = (
+        network
+        if isinstance(network, soroban_models.NetworkConfig)
+        else soroban_models.NetworkConfig.from_network(network=network)
+    )
 
     soroban_server = stellar_sdk.SorobanServer(network.rpc_url)
     source_account = soroban_server.load_account(identity.public_key)
