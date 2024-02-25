@@ -1,6 +1,6 @@
 import pathlib
 
-from pydantic import model_validator, HttpUrl, BaseModel
+from pydantic import model_validator, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from stellar_sdk import Keypair, Network
 
@@ -44,13 +44,8 @@ class Identity(BaseSettings):
 
 
 class NetworkConfig(BaseSettings):
-    soroban_rpc_url: HttpUrl = HttpUrl("https://soroban-testnet.stellar.org:443")
-    passphrase: str = Network.TESTNET_NETWORK_PASSPHRASE
+    rpc_url: HttpUrl = HttpUrl("https://soroban-testnet.stellar.org:443")
+    network_passphrase: str = Network.TESTNET_NETWORK_PASSPHRASE
     base_fee: int = 100
 
     model_config = SettingsConfigDict(env_file="network.toml")
-
-
-class SorobanConfig(BaseModel):
-    network: NetworkConfig = NetworkConfig()
-    keys: list[Identity] = None

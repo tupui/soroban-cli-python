@@ -13,19 +13,20 @@ __all__ = ["invoke"]
 def invoke(
     contract_id: str,
     function_name: str,
-    args: list[xdr.SCVal],
+    args: list[xdr.SCVal] | None = None,
     *,
     source_account: stellar_sdk.Keypair | str | None = None,
     network: soroban_models.NetworkConfig | None = None,
 ):
     identity = soroban_models.Identity.from_source_account(account=source_account)
+    network = soroban_models.NetworkConfig() if network is None else network
 
-    soroban_server = stellar_sdk.SorobanServer(network.soroban_rpc_url)
+    soroban_server = stellar_sdk.SorobanServer(network.rpc_url)
     source_account = soroban_server.load_account(identity.public_key)
 
     tx = (
         stellar_sdk.TransactionBuilder(
-            source_account, network.passphrase, base_fee=network.base_fee
+            source_account, network.network_passphrase, base_fee=network.base_fee
         )
         .add_time_bounds(0, 0)
         .append_invoke_contract_function_op(
