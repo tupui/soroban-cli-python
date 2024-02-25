@@ -1,8 +1,10 @@
+import pathlib
+
 from pydantic import model_validator, HttpUrl, BaseModel
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from stellar_sdk import Keypair, Network
 
-__all__ = ["Identity"]
+__all__ = ["Identity", "NetworkConfig"]
 
 
 class Identity(BaseSettings):
@@ -23,6 +25,23 @@ class Identity(BaseSettings):
         self.public_key = self.keypair.public_key
         return self
 
+    @classmethod
+    def from_source_account(
+        cls, account: Keypair | str | pathlib.Path | None = None
+    ) -> "Identity":
+        if account is None:
+            identity = Identity()
+        elif isinstance(account, (str, pathlib.Path)):
+            fname = (
+                account
+                if pathlib.Path(account).is_file()
+                else pathlib.Path(".soroban/identity") / account / ".toml"
+            )
+            identity = Identity(_env_file=fname)
+        else:
+            identity = Identity(keypair=account)
+        return identity
+
 
 class NetworkConfig(BaseSettings):
     soroban_rpc_url: HttpUrl = HttpUrl("https://soroban-testnet.stellar.org:443")
@@ -33,4 +52,4 @@ class NetworkConfig(BaseSettings):
 
 class SorobanConfig(BaseModel):
     network: NetworkConfig = NetworkConfig()
-    keys: list[Identity] = [Identity()]
+    keys: list[Identity] = None
