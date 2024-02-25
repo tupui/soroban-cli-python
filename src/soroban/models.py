@@ -46,6 +46,7 @@ class Identity(BaseSettings):
 class NetworkConfig(BaseSettings):
     soroban_rpc_url: HttpUrl = HttpUrl("https://soroban-testnet.stellar.org:443")
     passphrase: str = Network.TESTNET_NETWORK_PASSPHRASE
+    base_fee: int = 100
 
     model_config = SettingsConfigDict(env_file="network.toml")
 
