@@ -65,7 +65,6 @@ def invoke(
         transaction_meta = xdr.TransactionMeta.from_xdr(
             transaction_result.result_meta_xdr
         )
-        if transaction_meta.v3.soroban_meta.return_value.type == xdr.SCValType.SCV_VOID:
-            return transaction_meta
+        return transaction_meta
     else:
         raise SdkError(f"Transaction failed: {transaction_result.result_xdr}")
