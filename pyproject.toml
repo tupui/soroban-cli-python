@@ -45,6 +45,8 @@ classifiers = [
 
 dependencies = [
     "stellar-sdk",
+    "pydantic",
+    "pydantic-settings",
 ]
 
 [project.optional-dependencies]
