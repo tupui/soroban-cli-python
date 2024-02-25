@@ -16,21 +16,18 @@ jobs:
     strategy:
       matrix:
         python-version: ['3.11', '3.12']
-    defaults:
-      run:
-        shell: bash -l {0}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: matrix.python-version
+          python-version: ${{ matrix.python-version }}
           cache: 'pip'
           cache-dependency-path: |
             **/pyproject.toml
 
       - name: Install package
         run: |
-          pip install .[test]
+          pip install .[tests]
 
       - name: Test
         if: matrix.python-version != '3.12'
