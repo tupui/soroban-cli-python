@@ -21,6 +21,8 @@ def _load_configuration(id: str | pathlib.Path, kind: Literal["identity", "netwo
         return local_config
     elif global_config.is_file():
         return global_config
+    else:
+        raise ValueError(f"Cannot find a {kind!r} configuration for {id!r}")
 
 
 class Identity(BaseSettings):

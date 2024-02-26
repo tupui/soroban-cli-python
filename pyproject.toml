@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "soroban"
-version = "1.0.0"
+version = "0.2.0"
 description = "CLI for Soroban contracts in Python"
 readme = "README.md"
 requires-python = ">=3.11"
