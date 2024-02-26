@@ -49,7 +49,7 @@ def invoke(
     transaction = soroban_server.send_transaction(tx)
 
     if transaction.status != SendTransactionStatus.PENDING:
-        raise SdkError("Failed to send transaction")
+        raise SdkError(f"Failed to send transaction: {transaction.hash}")
 
     i = 0
     while i < 10:
@@ -59,12 +59,13 @@ def invoke(
         time.sleep(3)
         i += 1
     else:
-        raise SdkError("Timeout: could not validate transaction")
+        raise SdkError(f"Timeout - could not validate transaction: {transaction.hash}")
 
     if transaction_result.status == GetTransactionStatus.SUCCESS:
         transaction_meta = xdr.TransactionMeta.from_xdr(
             transaction_result.result_meta_xdr
         )
-        return transaction_meta
+        result = transaction_meta.v3.soroban_meta.return_value
+        return result
     else:
         raise SdkError(f"Transaction failed: {transaction_result.result_xdr}")
