@@ -21,7 +21,6 @@ def invoke(
     if args is not None:
         args = json.load(args)
         args = soroban.Parameters(args=args).model_dump()
-        print(args)
 
     res = soroban.invoke(
         contract_id=contract_id,
