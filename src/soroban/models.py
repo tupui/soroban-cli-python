@@ -1,7 +1,7 @@
 import pathlib
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, model_validator, HttpUrl
+from pydantic import BaseModel, ConfigDict, model_serializer, model_validator, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from stellar_sdk import xdr
 from stellar_sdk import Keypair, Network, scval
@@ -90,4 +90,10 @@ class Parameter(BaseModel):
 
 
 class Parameters(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     args: list[Parameter]
+
+    @model_serializer
+    def ser_model(self) -> list[xdr.SCVal]:
+        return [arg.value for arg in self.args]
