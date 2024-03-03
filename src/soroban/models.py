@@ -1,11 +1,12 @@
 import pathlib
 from typing import Literal
 
-from pydantic import model_validator, HttpUrl
+from pydantic import BaseModel, ConfigDict, model_validator, HttpUrl
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from stellar_sdk import Keypair, Network
+from stellar_sdk import xdr
+from stellar_sdk import Keypair, Network, scval
 
-__all__ = ["Identity", "NetworkConfig"]
+__all__ = ["Identity", "NetworkConfig", "Parameter", "Parameters"]
 
 
 def _load_configuration(id: str | pathlib.Path, kind: Literal["identity", "network"]):
@@ -72,3 +73,21 @@ class NetworkConfig(BaseSettings):
             fname = _load_configuration(network, "network")
             network = NetworkConfig(_env_file=fname)
         return network
+
+
+class Parameter(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    name: str
+    type: str
+    value: int | float | str | xdr.SCVal
+
+    @model_validator(mode="after")
+    def value_to_scval(self) -> "Parameter":
+        if not isinstance(self.value, xdr.SCVal):
+            self.value = getattr(scval, f"to_{self.type}")(self.value)
+        return self
+
+
+class Parameters(BaseModel):
+    args: list[Parameter]

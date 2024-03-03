@@ -1,0 +1,12 @@
+[
+  {
+    "name": "issuer",
+    "type": "address",
+    "value": "CAARHG6ZR6DPHOSH5HAHPJZKXJV6YJVDRYZ7ADGPEC2MQMDUKAQCGNWB"
+  },
+  {
+    "name": "distributor",
+    "type": "int128",
+    "value": 10
+  }
+]

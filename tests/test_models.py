@@ -1,8 +1,9 @@
+import json
 import pathlib
 
 import pytest
 import soroban
-from stellar_sdk import Keypair
+from stellar_sdk import Keypair, scval
 
 
 class TestIdentity:
@@ -37,3 +38,19 @@ class TestNetworkConfig:
     def test_from_network(self):
         testnet = pathlib.Path(__file__).parent / "testnet.toml"
         soroban.NetworkConfig.from_network(network=testnet)
+
+
+class TestParams:
+
+    def test_parameter(self):
+        args = {"name": "distributor", "type": "int128", "value": 10}
+        soroban.Parameter(**args)
+
+        args = {"name": "distributor", "type": "int128", "value": scval.to_int128(10)}
+        soroban.Parameter(**args)
+
+    def test_parameters(self):
+        fname = pathlib.Path(__file__).parent / "params_invoke.json"
+        with open(fname, "rb") as fd:
+            args = json.load(fd)
+        soroban.Parameters(args=args)
