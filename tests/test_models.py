@@ -49,6 +49,23 @@ class TestParams:
         args = {"name": "distributor", "type": "int128", "value": scval.to_int128(10)}
         soroban.Parameter(**args)
 
+        args = {
+            "name": "thresholds",
+            "type": "vec",
+            "value": [scval.to_int128(10), {"type": "uint32", "value": 4}],
+        }
+        soroban.Parameter(**args)
+
+        args = {
+            "name": "thresholds",
+            "type": "vec",
+            "value": [
+                scval.to_int128(10),
+                {"type": "int128", "value": scval.to_int128(10)},
+            ],
+        }
+        soroban.Parameter(**args)
+
     def test_parameters(self):
         fname = pathlib.Path(__file__).parent / "params_invoke.json"
         with open(fname, "rb") as fd:

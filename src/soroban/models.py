@@ -75,18 +75,28 @@ class NetworkConfig(BaseSettings):
         return network
 
 
-class Parameter(BaseModel):
+class Argument(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
-    name: str
     type: str
-    value: int | float | str | xdr.SCVal
+    value: int | str | xdr.SCVal
+
+
+class Parameter(Argument):
+    name: str
+    value: int | str | xdr.SCVal | list[Argument | xdr.SCVal]
 
     @model_validator(mode="after")
     def value_to_scval(self) -> "Parameter":
-        if not isinstance(self.value, xdr.SCVal):
-            self.value = getattr(scval, f"to_{self.type}")(self.value)
-        return self
+        if isinstance(self.value, list):
+            self.value = [self._value_to_scval(val) for val in self.value]
+        return self._value_to_scval(self)
+
+    @staticmethod
+    def _value_to_scval(value: Argument | xdr.SCVal):
+        if isinstance(value, Argument) and not isinstance(value.value, xdr.SCVal):
+            value = getattr(scval, f"to_{value.type}")(value.value)
+        return value
 
 
 class Parameters(BaseModel):

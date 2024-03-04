@@ -8,5 +8,19 @@
     "name": "distributor",
     "type": "int128",
     "value": 10
+  },
+  {
+    "name": "claimants",
+    "type": "vec",
+    "value": [
+      {
+        "type": "uint32",
+        "value": 12
+      },
+      {
+        "type": "int64",
+        "value": 20
+      }
+    ]
   }
 ]
