@@ -7,7 +7,6 @@ from stellar_sdk import Keypair, scval
 
 
 class TestIdentity:
-
     def test_file(self):
         alice_fname = pathlib.Path(__file__).parent / "alice.toml"
         soroban.Identity(_env_file=alice_fname)
@@ -34,14 +33,12 @@ class TestIdentity:
 
 
 class TestNetworkConfig:
-
     def test_from_network(self):
         testnet = pathlib.Path(__file__).parent / "testnet.toml"
         soroban.NetworkConfig.from_network(network=testnet)
 
 
 class TestParams:
-
     def test_parameter(self):
         args = {"name": "distributor", "type": "int128", "value": 10}
         soroban.Parameter(**args)
