@@ -90,7 +90,8 @@ class Parameter(Argument):
     def value_to_scval(self) -> "Parameter":
         if isinstance(self.value, list):
             self.value = [self._value_to_scval(val) for val in self.value]
-        return self._value_to_scval(self)
+        self.value = self._value_to_scval(self)
+        return self
 
     @staticmethod
     def _value_to_scval(value: Argument | xdr.SCVal):
