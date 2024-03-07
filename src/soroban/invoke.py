@@ -1,3 +1,4 @@
+import logging
 import time
 
 import stellar_sdk
@@ -8,6 +9,9 @@ from stellar_sdk.soroban_rpc import GetTransactionStatus, SendTransactionStatus
 import soroban.models as soroban_models
 
 __all__ = ["invoke"]
+
+
+logger = logging.getLogger(__name__)
 
 
 def invoke(
@@ -60,6 +64,11 @@ def invoke(
         i += 1
     else:
         raise SdkError(f"Timeout - could not validate transaction: {transaction.hash}")
+
+    transaction_envelope = stellar_sdk.parse_transaction_envelope_from_xdr(
+        transaction_result.envelope_xdr, network_passphrase=network.network_passphrase
+    )
+    logger.debug(transaction_envelope)
 
     if transaction_result.status == GetTransactionStatus.SUCCESS:
         transaction_meta = xdr.TransactionMeta.from_xdr(
