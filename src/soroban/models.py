@@ -50,6 +50,8 @@ class Identity(BaseSettings):
     ) -> "Identity":
         if account is None:
             identity = Identity()
+        if isinstance(account, str) and account.startswith("S") and len(account) == 56:
+            identity = Identity(secret_key=account)
         elif isinstance(account, (str, pathlib.Path)):
             fname = _load_configuration(account, "identity")
             identity = Identity(_env_file=fname)

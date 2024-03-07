@@ -9,12 +9,12 @@ from stellar_sdk import Keypair, scval
 class TestIdentity:
     def test_file(self):
         alice_fname = pathlib.Path(__file__).parent / "alice.toml"
-        soroban.Identity(_env_file=alice_fname).model_dump()
+        soroban.Identity(_env_file=alice_fname)
 
     def test_from_pk(self):
         keypair = Keypair.random()
         soroban.Identity(secret_key=keypair.secret)
-        soroban.Identity(keypair=keypair).model_dump()
+        soroban.Identity(keypair=keypair)
 
     def test_from_source_account(self):
         alice_fname = pathlib.Path(__file__).parent / "alice.toml"
@@ -23,19 +23,21 @@ class TestIdentity:
         keypair = Keypair.random()
         soroban.Identity.from_source_account(account=keypair)
 
+        soroban.Identity.from_source_account(account=keypair.secret)
+
     def test_raises(self):
         with pytest.raises(ValueError, match="provide a secret key or a Keypair"):
-            soroban.Identity().model_dump()
+            soroban.Identity()
 
         keypair = Keypair.random()
         with pytest.raises(ValueError, match="provide a secret key or a Keypair"):
-            soroban.Identity(public_key=keypair.public_key).model_dump()
+            soroban.Identity(public_key=keypair.public_key)
 
 
 class TestNetworkConfig:
     def test_from_network(self):
         testnet = pathlib.Path(__file__).parent / "testnet.toml"
-        soroban.NetworkConfig.from_network(network=testnet).model_dump()
+        soroban.NetworkConfig.from_network(network=testnet)
 
 
 class TestParams:
