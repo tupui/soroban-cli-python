@@ -74,6 +74,13 @@ class NetworkConfig(BaseSettings):
 
     model_config = SettingsConfigDict(env_file="network.toml")
 
+    @model_validator(mode="after")
+    def load_urls(self) -> "NetworkConfig":
+        # or use the Annotated construction
+        self.horizon_url = str(self.horizon_url)
+        self.rpc_url = str(self.rpc_url)
+        return self
+
     @classmethod
     def from_network(cls, network: str | pathlib.Path | None = None) -> "NetworkConfig":
         if network is None:
