@@ -66,7 +66,8 @@ class Identity(BaseSettings):
 
 
 class NetworkConfig(BaseSettings):
-    rpc_url: HttpUrl = HttpUrl("https://soroban-testnet.stellar.org:443")
+    horizon_url: HttpUrl = HttpUrl("https://horizon-testnet.stellar.org")
+    rpc_url: HttpUrl = HttpUrl("https://soroban-testnet.stellar.org")
     network_passphrase: str = Network.TESTNET_NETWORK_PASSPHRASE
     base_fee: int = 100
 

@@ -21,7 +21,22 @@ def invoke(
     *,
     source_account: soroban_models.Identity | stellar_sdk.Keypair | str | None = None,
     network: soroban_models.NetworkConfig | soroban_models.NetworkConfig | None = None,
-):
+) -> xdr.SCVal:
+    """Invoke a Soroban contract.
+
+    Parameters
+    ----------
+    contract_id : contract hash.
+    function_name : name of the function to invoke.
+    args : parameters passed to the contract function.
+    source_account : signing account.
+    network : network to use.
+
+    Returns
+    -------
+    result : return value of the contract invocation.
+
+    """
     identity = (
         source_account
         if isinstance(source_account, soroban_models.Identity)
