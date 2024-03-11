@@ -36,7 +36,10 @@ class Identity(BaseSettings):
     @model_validator(mode="after")
     def load_keys(self) -> "Identity":
         if self.keypair is None and self.secret_key is None:
-            raise ValueError("Either provide a secret key or a Keypair object.")
+            raise ValueError(
+                "Either provide a secret key or a Keypair object. Also look"
+                "in 'identity.toml'"
+            )
         if self.keypair is not None:
             self.secret_key = self.keypair.secret
         else:
@@ -50,7 +53,9 @@ class Identity(BaseSettings):
     ) -> "Identity":
         if account is None:
             identity = Identity()
-        if isinstance(account, str) and account.startswith("S") and len(account) == 56:
+        elif (
+            isinstance(account, str) and account.startswith("S") and len(account) == 56
+        ):
             identity = Identity(secret_key=account)
         elif isinstance(account, (str, pathlib.Path)):
             fname = _load_configuration(account, "identity")

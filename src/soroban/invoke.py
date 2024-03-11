@@ -34,11 +34,11 @@ def invoke(
     )
 
     soroban_server = stellar_sdk.SorobanServer(network.rpc_url)
-    source_account = soroban_server.load_account(identity.public_key)
+    source_account_ = soroban_server.load_account(identity.public_key)
 
     tx = (
         stellar_sdk.TransactionBuilder(
-            source_account, network.network_passphrase, base_fee=network.base_fee
+            source_account_, network.network_passphrase, base_fee=network.base_fee
         )
         .add_time_bounds(0, 0)
         .append_invoke_contract_function_op(

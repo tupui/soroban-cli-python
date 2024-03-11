@@ -1,4 +1,5 @@
 import json
+import os
 import pathlib
 
 import pytest
@@ -17,6 +18,9 @@ class TestIdentity:
         soroban.Identity(keypair=keypair)
 
     def test_from_source_account(self):
+        # identity.toml exists
+        os.chdir(pathlib.Path(__file__).parent)
+        soroban.Identity.from_source_account()
         alice_fname = pathlib.Path(__file__).parent / "alice.toml"
         soroban.Identity.from_source_account(account=alice_fname)
 
@@ -26,6 +30,7 @@ class TestIdentity:
         soroban.Identity.from_source_account(account=keypair.secret)
 
     def test_raises(self):
+        os.chdir(pathlib.Path(__file__).parent.parent)
         with pytest.raises(ValueError, match="provide a secret key or a Keypair"):
             soroban.Identity()
 
