@@ -48,7 +48,7 @@ def create_account(
         else soroban_models.NetworkConfig.from_network(network=network)
     )
 
-    horizon_server = stellar_sdk.Server(network.rpc_url)
+    horizon_server = stellar_sdk.Server(network.horizon_url)
     source_account_ = horizon_server.load_account(identity.public_key)
 
     # the new account itself
@@ -110,7 +110,7 @@ def create_asset(
 
     # Transactions require a valid sequence number that is specific to this account.
     # We can fetch the current sequence number for the source account from Horizon.
-    horizon_server = stellar_sdk.Server(network.rpc_url)
+    horizon_server = stellar_sdk.Server(network.horizon_url)
     distributor_account = horizon_server.load_account(distributor.public_key)
 
     asset = stellar_sdk.Asset(code=name, issuer=issuer.public_key)
