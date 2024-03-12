@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "soroban"
 dynamic = ["version"]
-description = "CLI for Soroban contracts in Python"
+description = "API and CLI for Soroban contracts in Python"
 readme = "README.md"
 requires-python = ">=3.11"
 license = "BSD-3-Clause"
@@ -13,7 +13,7 @@ authors = [
     { name = "Pamphile Roy" },
 ]
 maintainers = [
-    { name = "Soroban CLI contributors" },
+    { name = "Soroban API/CLI contributors" },
 ]
 
 keywords = [
