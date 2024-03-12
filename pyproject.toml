@@ -47,6 +47,7 @@ dependencies = [
     "stellar-sdk",
     "pydantic",
     "pydantic-settings",
+    "tomli_w",
 ]
 
 [project.optional-dependencies]
