@@ -33,7 +33,7 @@ class Identity(BaseSettings):
     keypair: Keypair | None = None
 
     model_config = SettingsConfigDict(
-        env_file=["identity.toml", ".soroban/identity.toml"]
+        env_file=["identity.toml", ".soroban/identity/identity.toml"]
     )
 
     @model_validator(mode="after")
