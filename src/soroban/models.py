@@ -33,7 +33,10 @@ class Identity(BaseSettings):
     keypair: Keypair | None = None
 
     model_config = SettingsConfigDict(
-        env_file=["identity.toml", ".soroban/identity/identity.toml"]
+        env_file=[
+            "identity.toml",
+            pathlib.Path(".soroban") / "identity" / "identity.toml",
+        ]
     )
 
     @model_validator(mode="after")
@@ -81,7 +84,9 @@ class NetworkConfig(BaseSettings):
     network_passphrase: str = Network.TESTNET_NETWORK_PASSPHRASE
     base_fee: int = 100
 
-    model_config = SettingsConfigDict(env_file="network.toml")
+    model_config = SettingsConfigDict(
+        env_file=["network.toml", pathlib.Path(".soroban") / "network" / "network.toml"]
+    )
 
     @model_validator(mode="after")
     def load_urls(self) -> "NetworkConfig":

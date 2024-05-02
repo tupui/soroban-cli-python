@@ -20,8 +20,8 @@ import soroban
 soroban.invoke(contract_id="AAAA...", function_name="increment")
 ```
 
-Identity and Network configurations are automatically pulled from the global
-or local configuration.
+Identity and Network configurations are automatically pulled from the
+local configuration or the current working directory. See bellow.
 
 It also provides a CLI
 ```shell
