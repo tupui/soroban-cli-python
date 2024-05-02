@@ -92,5 +92,5 @@ testpaths = [
     "tests",
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "**/__init__.py" = ["F403", "F405"]

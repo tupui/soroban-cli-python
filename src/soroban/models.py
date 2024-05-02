@@ -27,6 +27,7 @@ def _load_configuration(id: str | pathlib.Path, kind: Literal["identity", "netwo
 
 
 class Identity(BaseSettings):
+    seed_phrase: str | None = None
     secret_key: str | None = None
     public_key: str | None = None
     keypair: Keypair | None = None
@@ -35,15 +36,21 @@ class Identity(BaseSettings):
 
     @model_validator(mode="after")
     def load_keys(self) -> "Identity":
-        if self.keypair is None and self.secret_key is None:
+        if (
+            self.keypair is None
+            and self.secret_key is None
+            and self.seed_phrase is None
+        ):
             raise ValueError(
-                "Either provide a secret key or a Keypair object. Also look"
+                "Either provide a seed phrase, secret key or a Keypair object. Also look"
                 "in 'identity.toml'"
             )
         if self.keypair is not None:
             self.secret_key = self.keypair.secret
-        else:
+        elif self.secret_key is not None:
             self.keypair = Keypair.from_secret(self.secret_key)
+        else:
+            self.keypair = Keypair.from_mnemonic_phrase(self.seed_phrase)
         self.public_key = self.keypair.public_key
         return self
 

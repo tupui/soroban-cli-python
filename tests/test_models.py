@@ -31,11 +31,12 @@ class TestIdentity:
 
     def test_raises(self):
         os.chdir(pathlib.Path(__file__).parent.parent)
-        with pytest.raises(ValueError, match="provide a secret key or a Keypair"):
+        msg = "Either provide a seed phrase, secret key"
+        with pytest.raises(ValueError, match=msg):
             soroban.Identity()
 
         keypair = Keypair.random()
-        with pytest.raises(ValueError, match="provide a secret key or a Keypair"):
+        with pytest.raises(ValueError, match=msg):
             soroban.Identity(public_key=keypair.public_key)
 
 
