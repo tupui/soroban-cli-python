@@ -3,7 +3,7 @@ import time
 
 import stellar_sdk
 from stellar_sdk import xdr
-from stellar_sdk.exceptions import SdkError
+from stellar_sdk.exceptions import PrepareTransactionException, SdkError
 from stellar_sdk.soroban_rpc import GetTransactionStatus, SendTransactionStatus
 
 import soroban.models as soroban_models
@@ -63,7 +63,13 @@ def invoke(
         )
         .build()
     )
-    tx = soroban_server.prepare_transaction(tx)
+
+    try:
+        tx = soroban_server.prepare_transaction(tx)
+    except PrepareTransactionException as err:
+        err_msg = err.simulate_transaction_response.error
+        raise SdkError(f"Failed to simulate transaction: {err_msg}")
+
     tx.sign(identity.keypair)
     transaction = soroban_server.send_transaction(tx)
 
