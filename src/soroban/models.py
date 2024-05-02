@@ -109,12 +109,12 @@ class Argument(BaseModel):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     type: str
-    value: int | str | xdr.SCVal
+    value: int | bytes | str | xdr.SCVal
 
 
 class Parameter(Argument):
     name: str
-    value: int | str | xdr.SCVal | list[Argument | xdr.SCVal]
+    value: int | bytes | str | xdr.SCVal | list[Argument | xdr.SCVal]
 
     @model_validator(mode="after")
     def value_to_scval(self) -> "Parameter":
