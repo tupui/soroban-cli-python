@@ -47,6 +47,7 @@ def invoke(
         if isinstance(network, soroban_models.NetworkConfig)
         else soroban_models.NetworkConfig.from_network(network=network)
     )
+    args = args.model_dump() if isinstance(args, soroban_models.Parameters) else args
 
     soroban_server = stellar_sdk.SorobanServer(network.rpc_url)
     source_account_ = soroban_server.load_account(identity.public_key)

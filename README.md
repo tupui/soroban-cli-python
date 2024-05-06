@@ -46,7 +46,7 @@ import json
 import soroban
 
 args = json.load(...)
-args = soroban.Parameters(args=args).model_dump()
+args = soroban.Parameters(args=args)
 soroban.invoke(contract_id="AAAA...", function_name="init", args=args)
 ```
 
