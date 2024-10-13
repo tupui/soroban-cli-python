@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def invoke(
     contract_id: str,
     function_name: str,
-    args: list[xdr.SCVal] | None = None,
+    args: soroban_models.Parameters | list[xdr.SCVal] | None = None,
     *,
     source_account: soroban_models.Identity | stellar_sdk.Keypair | str | None = None,
     network: soroban_models.NetworkConfig | soroban_models.NetworkConfig | None = None,
@@ -69,7 +69,9 @@ def invoke(
         tx = soroban_server.prepare_transaction(tx)
     except PrepareTransactionException as err:
         err_msg = err.simulate_transaction_response.error
-        raise SdkError(f"Failed to simulate transaction: {err_msg}")
+        raise SdkError(
+            f"Failed to simulate transaction: {err_msg}\nXDR:\n{tx.to_xdr()}\nEnveloppe:\n{tx.transaction}"
+        )
 
     tx.sign(identity.keypair)
     transaction = soroban_server.send_transaction(tx)
