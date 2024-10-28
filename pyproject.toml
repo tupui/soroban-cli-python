@@ -7,7 +7,7 @@ name = "soroban"
 dynamic = ["version"]
 description = "API and CLI for Soroban contracts in Python"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 license = "BSD-3-Clause"
 authors = [
     { name = "Pamphile Roy" },
