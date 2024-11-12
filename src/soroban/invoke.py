@@ -74,20 +74,25 @@ def invoke(
         )
 
     tx.sign(identity.keypair)
+
     transaction = soroban_server.send_transaction(tx)
 
     if transaction.status != SendTransactionStatus.PENDING:
-        raise SdkError(f"Failed to send transaction: {transaction.hash}")
+        raise SdkError(
+            f"Failed to send transaction: {transaction.hash!r} with {transaction.error_result_xdr!r}"
+        )
 
     i = 0
     while i < 10:
+        time.sleep(3)
         transaction_result = soroban_server.get_transaction(transaction.hash)
         if transaction_result.status != GetTransactionStatus.NOT_FOUND:
             break
-        time.sleep(3)
         i += 1
     else:
-        raise SdkError(f"Timeout - could not validate transaction: {transaction.hash}")
+        raise SdkError(
+            f"Timeout - could not validate transaction: {transaction.hash!r} with {transaction.error_result_xdr!r}"
+        )
 
     transaction_envelope = stellar_sdk.parse_transaction_envelope_from_xdr(
         transaction_result.envelope_xdr, network_passphrase=network.network_passphrase
@@ -101,4 +106,6 @@ def invoke(
         result = transaction_meta.v3.soroban_meta.return_value
         return result
     else:
-        raise SdkError(f"Transaction failed: {transaction_result.result_xdr}")
+        raise SdkError(
+            f"Transaction failed: {transaction.hash!r} with {transaction_result.result_xdr!r}"
+        )
